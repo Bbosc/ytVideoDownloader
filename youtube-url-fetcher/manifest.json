@@ -1,0 +1,45 @@
+{
+  "name": "Youtube downloader",
+  "version": "0.1.0",
+  "description": "Save current youtube url",
+  "permissions": ["scripting", "storage", "tabs","webNavigation","activeTab"],
+  "host_permissions": ["https://*.youtube.com/*","https://myfreemp3juices.cc/"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "externally_connectable":{
+    "matches" : [
+      "https://*.youtube.com/*",
+      "https://myfreemp3juices.cc/*"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.youtube.com/*","https://myfreemp3juices.cc/*"],
+      "js": ["contentScript.js"]
+    },
+    {
+      "matches": ["https://myfreemp3juices.cc/*"],
+      "js": ["downloader.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/download.png",
+        "assets/ext-icon.png"
+      ],
+      "matches": ["https://*.youtube.com/*", "https://myfreemp3juices.cc/*"]
+    }
+  ],
+  "action": {
+    "default_icon": {
+      "16": "assets/ext-icon.png",
+      "24": "assets/ext-icon.png",
+      "32": "assets/ext-icon.png"
+    },
+    "default_title": "Save current youtube url",
+    "default_popup": "popup.html"
+  },
+  "manifest_version": 3
+}
