@@ -13,6 +13,7 @@ chrome.tabs.onUpdated.addListener((tabId, tab) => {
 });
 
 var videoTitle;
+var videoDuration;
 
 chrome.runtime.onMessage.addListener(async function(request, sender, sendResponse) {
   console.log(request.videoToDownload);
@@ -20,13 +21,15 @@ chrome.runtime.onMessage.addListener(async function(request, sender, sendRespons
   if (request.origin === "downloader"){
     console.log("sended by downloader.js");
   } else if (request.origin === "contentscript"){
-    chrome.windows.create({url:"https://myfreemp3juices.cc/"});
+    chrome.windows.create({url:"https://myfreemp3juices.cc/", state:"minimized", focused: false});
     videoTitle = request.videoToDownload;
+    duration = request.videoDuration;
   }
 
   chrome.tabs.sendMessage(sender.tab.id, {
     type: "DOWNLOAD",
     videoId: videoTitle,
+    videoDuration: duration,
     currentUrl: "",
   });
   

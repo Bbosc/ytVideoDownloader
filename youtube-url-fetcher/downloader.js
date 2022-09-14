@@ -1,6 +1,7 @@
 (() => {
 
   let videoTitle = "";
+  let duration = "";
   let downloadLink ;
   let addInfo ;
 
@@ -8,15 +9,41 @@
   window.addEventListener('load', function () {
     chrome.runtime.sendMessage({
       origin : "downloader",
-      videoToDownload: "surprise"
+      videoToDownload: "surprise",
+      videoDuration: ""
     });
     
   })
 
+  function convertToSeconds(){
+    const splited = duration.split(":");
+    return splited[0]*60 + parseInt(splited[1]);
+  }
+
+  //to download the best choice, let's consider that the best one is the link whose video has the closest duration from the original.
+
+  function bestChoice(){
+
+    let baseDuration = convertToSeconds();
+
+    let container = document.getElementsByClassName("list-group")[0].getElementsByClassName("btn-group pull-right badge-download");
+    let listOfDurations = Array(container.length);
+    for (let i = 0; i< container.length; i++){
+      listOfDurations[i] = Math.abs(parseInt(container[i].getElementsByTagName("a").item('1').getAttribute("data-duration")) - baseDuration);
+
+    }
+    const min = Math.min.apply(Math,listOfDurations);
+    const index = listOfDurations.indexOf(min);
+    return index;
+
+  }
+
   function gettingDownloadLink(){
+
+    const bestIndex = bestChoice();
     
-    downloadLink = document.getElementsByClassName("list-group")[0].getElementsByTagName("a").item('4').href;
-    addInfo = document.getElementsByClassName("list-group")[0].getElementsByClassName("dropdown-menu")[0].getElementsByTagName("li")[1].textContent;
+    downloadLink = document.getElementsByClassName("list-group")[0].getElementsByClassName('name')[bestIndex].href;
+    // let linkDuration = document.getElementsByClassName("list-group")[0].getElementsByClassName("btn-group pull-right badge-download")[0].getElementsByTagName("a").item('1').getAttribute("data-duration");
     window.open(downloadLink);
 
   }
@@ -26,16 +53,18 @@
     document.getElementById("query").value = videoTitle;
     document.getElementsByClassName("btn btn-primary search")[0].click();
     //giving some time to load the results
-    setTimeout(() => {gettingDownloadLink();},2000);
+    setTimeout(() => {gettingDownloadLink();},1000);
  
   }
 
 
   chrome.runtime.onMessage.addListener((obj, sender, response) => {
-    const { type, videoId, currentUrl } = obj;
+    const { type, videoId, videoDuration, currentUrl } = obj;
 
     if (type === "DOWNLOAD") {
       videoTitle = videoId;
+      duration = videoDuration;
+
       searchForDownload();
     }
   });

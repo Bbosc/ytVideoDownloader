@@ -2,7 +2,6 @@
   let youtubeLeftControls, youtubePlayer;
   let currentVideo = "";
   let currentUrl ;
-  let videoTitle = "";
 
 
   function getCurrentURL () {
@@ -15,12 +14,13 @@
 
     const container = document.getElementsByClassName("title style-scope ytd-video-primary-info-renderer")[0];
     const title = container.getElementsByClassName("style-scope ytd-video-primary-info-renderer")[0].textContent;
-    videoTitle = title;
+    const duration = document.getElementsByClassName("ytp-time-duration")[0].textContent;
 
     // sending the title to background.js
     chrome.runtime.sendMessage({
       origin : "contentscript",
-      videoToDownload : title})
+      videoToDownload : title,
+      videoDuration: duration})
 
   };
 
@@ -43,7 +43,7 @@
   };
 
   chrome.runtime.onMessage.addListener((obj, sender, response) => {
-    const { type, videoId, currentUrl } = obj;
+    const { type, videoId, videoDuration, currentUrl } = obj;
 
     if (type === "NEW") {
       currentVideo = videoId;
