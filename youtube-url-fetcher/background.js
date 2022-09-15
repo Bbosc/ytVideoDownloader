@@ -14,6 +14,7 @@ chrome.tabs.onUpdated.addListener((tabId, tab) => {
 
 var videoTitle;
 var videoDuration;
+var channelName;
 
 chrome.runtime.onMessage.addListener(async function(request, sender, sendResponse) {
   console.log(request.videoToDownload);
@@ -24,12 +25,14 @@ chrome.runtime.onMessage.addListener(async function(request, sender, sendRespons
     chrome.windows.create({url:"https://myfreemp3juices.cc/", state:"minimized", focused: false});
     videoTitle = request.videoToDownload;
     duration = request.videoDuration;
+    channel = request.channelName
   }
 
   chrome.tabs.sendMessage(sender.tab.id, {
     type: "DOWNLOAD",
     videoId: videoTitle,
     videoDuration: duration,
+    channelName: channel,
     currentUrl: "",
   });
   

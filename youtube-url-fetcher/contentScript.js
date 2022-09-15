@@ -16,11 +16,15 @@
     const title = container.getElementsByClassName("style-scope ytd-video-primary-info-renderer")[0].textContent;
     const duration = document.getElementsByClassName("ytp-time-duration")[0].textContent;
 
+    const mainWin = document.getElementsByClassName("watch-active-metadata style-scope ytd-watch-flexy");
+    const channel = mainWin[0].getElementsByClassName("style-scope ytd-video-secondary-info-renderer")[0].getElementsByClassName("style-scope ytd-channel-name").text.textContent
+
     // sending the title to background.js
     chrome.runtime.sendMessage({
       origin : "contentscript",
       videoToDownload : title,
-      videoDuration: duration})
+      videoDuration: duration,
+      channelName: channel})
 
   };
 

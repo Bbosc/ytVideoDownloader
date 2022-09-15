@@ -3,7 +3,7 @@
   let videoTitle = "";
   let duration = "";
   let downloadLink ;
-  let addInfo ;
+  let channel ;
 
   //initiate connection with background at loading.
   window.addEventListener('load', function () {
@@ -43,14 +43,13 @@
     const bestIndex = bestChoice();
     
     downloadLink = document.getElementsByClassName("list-group")[0].getElementsByClassName('name')[bestIndex].href;
-    // let linkDuration = document.getElementsByClassName("list-group")[0].getElementsByClassName("btn-group pull-right badge-download")[0].getElementsByTagName("a").item('1').getAttribute("data-duration");
     window.open(downloadLink);
 
   }
 
   const searchForDownload = async () => {
 
-    document.getElementById("query").value = videoTitle;
+    document.getElementById("query").value = videoTitle + " " + channel;
     document.getElementsByClassName("btn btn-primary search")[0].click();
     //giving some time to load the results
     setTimeout(() => {gettingDownloadLink();},1000);
@@ -59,11 +58,12 @@
 
 
   chrome.runtime.onMessage.addListener((obj, sender, response) => {
-    const { type, videoId, videoDuration, currentUrl } = obj;
+    const { type, videoId, videoDuration, channelName, currentUrl } = obj;
 
     if (type === "DOWNLOAD") {
       videoTitle = videoId;
       duration = videoDuration;
+      channel = channelName;
 
       searchForDownload();
     }
