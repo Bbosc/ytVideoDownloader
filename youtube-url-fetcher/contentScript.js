@@ -24,7 +24,8 @@
       origin : "contentscript",
       videoToDownload : title,
       videoDuration: duration,
-      channelName: channel})
+      channelName: channel,
+      url: getCurrentURL()})
 
   };
 
@@ -34,7 +35,7 @@
     if (!downloadBtnExists) {
       const downloadBtn = document.createElement("img");
 
-      downloadBtn.src = chrome.runtime.getURL("assets/download.png");
+      downloadBtn.src = chrome.runtime.getURL("assets/download_grey.png");
       downloadBtn.className = "ytp-button " + "download-btn";
       downloadBtn.title = "Click to add current video to downloading list";
 

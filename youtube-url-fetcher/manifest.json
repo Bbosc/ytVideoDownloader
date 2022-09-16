@@ -1,6 +1,6 @@
 {
   "name": "Youtube downloader",
-  "version": "1.0.0",
+  "version": "2.0",
   "description": "Save current youtube url",
   "permissions": ["scripting", "storage", "tabs","webNavigation","activeTab"],
   "host_permissions": ["https://*.youtube.com/*","https://myfreemp3juices.cc/"],
@@ -10,7 +10,8 @@
   "externally_connectable":{
     "matches" : [
       "https://*.youtube.com/*",
-      "https://myfreemp3juices.cc/*"
+      "https://myfreemp3juices.cc/*",
+      "https://notube.io/*"
     ]
   },
   "content_scripts": [
@@ -19,7 +20,7 @@
       "js": ["contentScript.js"]
     },
     {
-      "matches": ["https://myfreemp3juices.cc/*"],
+      "matches": ["https://myfreemp3juices.cc/*","https://notube.io/*"],
       "js": ["downloader.js"]
     }
   ],
@@ -27,9 +28,11 @@
     {
       "resources": [
         "assets/download.png",
+        "assets/download_grey.png",
+        "assets/download.webp",
         "assets/ext-icon.png"
       ],
-      "matches": ["https://*.youtube.com/*", "https://myfreemp3juices.cc/*"]
+      "matches": ["https://*.youtube.com/*", "https://myfreemp3juices.cc/*", "https://notube.io/*"]
     }
   ],
   "action": {

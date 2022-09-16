@@ -12,9 +12,12 @@ chrome.tabs.onUpdated.addListener((tabId, tab) => {
   }
 });
 
+var downloaderUrl = "https://myfreemp3juices.cc/";
 var videoTitle;
 var videoDuration;
 var channelName;
+var videoUrl;
+var downloadMod = "exotic";
 
 chrome.runtime.onMessage.addListener(async function(request, sender, sendResponse) {
   console.log(request.videoToDownload);
@@ -22,18 +25,24 @@ chrome.runtime.onMessage.addListener(async function(request, sender, sendRespons
   if (request.origin === "downloader"){
     console.log("sended by downloader.js");
   } else if (request.origin === "contentscript"){
-    chrome.windows.create({url:"https://myfreemp3juices.cc/", state:"minimized", focused: false});
+    chrome.windows.create({url:downloaderUrl, state:"minimized", focused: false});
     videoTitle = request.videoToDownload;
     duration = request.videoDuration;
-    channel = request.channelName
-  }
+    channel = request.channelName;
+    videoUrl = request.url;
+  } else if (request.origin === "popup"){
+    console.log(request.value);
+    downloaderUrl = request.value;
+    downloadMod = request.type;
+  } 
 
   chrome.tabs.sendMessage(sender.tab.id, {
     type: "DOWNLOAD",
     videoId: videoTitle,
     videoDuration: duration,
     channelName: channel,
-    currentUrl: "",
+    currentUrl: videoUrl,
+    mode: downloadMod,
   });
   
 });
