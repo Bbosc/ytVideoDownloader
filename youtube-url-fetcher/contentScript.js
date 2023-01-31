@@ -15,9 +15,7 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     // click to download
     waitForElm("#download > a:nth-child(1)").then((elm) =>{
       elm.click();
-      waitForElm("#download > a:nth-child(2)").then((el)=>{
-        el.click();
-      });
+      setTimeout(() => { window.location.reload(); }, 1000);
     });
     
 
