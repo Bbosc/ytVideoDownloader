@@ -15,7 +15,8 @@
   "content_scripts": [
     {
       "matches": [
-        "<all_urls>"
+        "https://www.youtube.com/*",
+        "https://ytmp3.nu/*"
       ],
       "js": [
         "contentScript.js"
