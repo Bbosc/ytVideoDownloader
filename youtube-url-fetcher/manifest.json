@@ -1,48 +1,31 @@
 {
-  "name": "Youtube downloader",
-  "version": "2.0",
-  "description": "Save current youtube url",
-  "permissions": ["scripting", "storage", "tabs","webNavigation","activeTab"],
-  "host_permissions": ["https://*.youtube.com/*","https://myfreemp3juices.cc/"],
-  "background": {
-    "service_worker": "background.js"
+  "manifest_version": 3,
+  "name": "Video downloader",
+  "description": "Download the audio of a youtube video.",
+  "version": "1.0.0",
+  "icons": {
+    "16": "assets/download_grey.png",
+    "48": "assets/download_grey.png",
+    "128": "assets/download_grey.png"
   },
-  "externally_connectable":{
-    "matches" : [
-      "https://*.youtube.com/*",
-      "https://myfreemp3juices.cc/*",
-      "https://notube.io/*"
-    ]
+  "action": {
+    "default_icon": "assets/download_grey.png",
+    "default_title": "Video downloader"
   },
   "content_scripts": [
     {
-      "matches": ["https://*.youtube.com/*","https://myfreemp3juices.cc/*"],
-      "js": ["contentScript.js"]
-    },
-    {
-      "matches": ["https://myfreemp3juices.cc/*","https://notube.io/*"],
-      "js": ["downloader.js"]
-    }
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": [
-        "assets/download.png",
-        "assets/download_grey.png",
-        "assets/download.webp",
-        "assets/ext-icon.png"
+      "matches": [
+        "<all_urls>"
       ],
-      "matches": ["https://*.youtube.com/*", "https://myfreemp3juices.cc/*", "https://notube.io/*"]
+      "js": [
+        "contentScript.js"
+      ]
     }
   ],
-  "action": {
-    "default_icon": {
-      "16": "assets/ext-icon.png",
-      "24": "assets/ext-icon.png",
-      "32": "assets/ext-icon.png"
-    },
-    "default_title": "Save current youtube url",
-    "default_popup": "popup.html"
+  "background": {
+    "service_worker": "background.js"
   },
-  "manifest_version": 3
+  "permissions": [
+    "activeTab","tabs"
+  ]
 }

@@ -1,62 +1,50 @@
-(() => {
-  let youtubeLeftControls, youtubePlayer;
-  let currentVideo = "";
-  let currentUrl ;
 
 
-  function getCurrentURL () {
-    return window.location.href
-  };
+chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+  if (msg.text === "damn it"){
+    console.log(msg.text);
+    console.log(msg.value);
+    const entryText = document.querySelector("#url");
+    entryText.value = msg.value;
+    const convertNext = document.querySelector("#download > a:nth-child(2)");
 
+    // click to convert
+    waitForElm("#form > form > input:nth-child(3)").then((elm) => {
+      elm.click();
+    });
+    // click to download
+    waitForElm("#download > a:nth-child(1)").then((elm) =>{
+      elm.click();
+      waitForElm("#download > a:nth-child(2)").then((el)=>{
+        el.click();
+      });
+    });
+    
 
-  const addNewDownloadEventHandler = async () => {
-    currentUrl = getCurrentURL();
+    
+  } else {
+    let images = document.URL;
+    chrome.runtime.sendMessage({text: "images",value:images});
+  }
+    
+});
 
-    const container = document.getElementsByClassName("title style-scope ytd-video-primary-info-renderer")[0];
-    const title = container.getElementsByClassName("style-scope ytd-video-primary-info-renderer")[0].textContent;
-    const duration = document.getElementsByClassName("ytp-time-duration")[0].textContent;
+function waitForElm(selector) {
+  return new Promise(resolve => {
+      if (document.querySelector(selector)) {
+          return resolve(document.querySelector(selector));
+      }
 
-    const mainWin = document.getElementsByClassName("watch-active-metadata style-scope ytd-watch-flexy");
-    const channel = mainWin[0].getElementsByClassName("style-scope ytd-video-secondary-info-renderer")[0].getElementsByClassName("style-scope ytd-channel-name").text.textContent
+      const observer = new MutationObserver(mutations => {
+          if (document.querySelector(selector)) {
+              resolve(document.querySelector(selector));
+              observer.disconnect();
+          }
+      });
 
-    // sending the title to background.js
-    chrome.runtime.sendMessage({
-      origin : "contentscript",
-      videoToDownload : title,
-      videoDuration: duration,
-      channelName: channel,
-      url: getCurrentURL()})
-
-  };
-
-  const newVideoLoaded = async () => {
-    const downloadBtnExists = document.getElementsByClassName("download-btn")[0];
-
-    if (!downloadBtnExists) {
-      const downloadBtn = document.createElement("img");
-
-      downloadBtn.src = chrome.runtime.getURL("assets/download_grey.png");
-      downloadBtn.className = "ytp-button " + "download-btn";
-      downloadBtn.title = "Click to add current video to downloading list";
-
-      youtubeLeftControls = document.getElementsByClassName("ytp-left-controls")[0];
-      youtubePlayer = document.getElementsByClassName('video-stream')[0];
-
-      youtubeLeftControls.appendChild(downloadBtn);
-      downloadBtn.addEventListener("click", addNewDownloadEventHandler);
-    }
-  };
-
-  chrome.runtime.onMessage.addListener((obj, sender, response) => {
-    const { type, videoId, videoDuration, currentUrl } = obj;
-
-    if (type === "NEW") {
-      currentVideo = videoId;
-      newVideoLoaded();
-    }
-    if (type === "DOWNLOAD"){
-      console.log("sending download intel : ", videoId);
-    }
+      observer.observe(document.body, {
+          childList: true,
+          subtree: true
+      });
   });
-
-})();
+}
