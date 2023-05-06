@@ -2,11 +2,12 @@
 
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   if (msg.text === "damn it"){
-    const entryText = document.querySelector("#url");
-    entryText.value = msg.value;
+    waitForElm("#url").then((elm) => {elm.value = msg.value});
+    // const entryText = document.querySelector("#url");
+    // entryText.value = msg.value;
    
     // click to convert
-    waitForElm("#form > form > input:nth-child(3)").then((elm) => {
+    waitForElm("body > form > div:nth-child(2) > input:nth-child(3)").then((elm) => {
       elm.click();
     });
     // click to download
@@ -28,7 +29,7 @@ function waitForElm(selector) {
           return resolve(document.querySelector(selector));
       }
 
-      const observer = new MutationObserver(mutations => {
+      const observer = new MutationObserver(_ => {
           if (document.querySelector(selector)) {
               resolve(document.querySelector(selector));
               observer.disconnect();
