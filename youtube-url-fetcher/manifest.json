@@ -1,5 +1,5 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "Video downloader",
   "description": "Download the audio of a youtube video.",
   "version": "1.0.0",
@@ -8,7 +8,7 @@
     "48": "assets/download_grey.png",
     "128": "assets/download_grey.png"
   },
-  "action": {
+  "browser_action": {
     "default_icon": "assets/download_grey.png",
     "default_title": "Video downloader"
   },
@@ -24,9 +24,14 @@
     }
   ],
   "background": {
-    "service_worker": "background.js"
+    "scripts" : ["background.js"]
   },
   "permissions": [
     "activeTab","tabs"
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "baudouin.bosc@gmail.com"
+    }
+  }
 }
