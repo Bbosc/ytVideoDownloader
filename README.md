@@ -5,3 +5,5 @@ First chrome extension for me, which basically allow a download of the current y
 A lot of garbage in the code for sure, as it is a first for me in JS.
 
 
+The main branch should work on chrome, the firefox branch works for firefox
+
