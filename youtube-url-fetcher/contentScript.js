@@ -5,13 +5,14 @@ browser.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     waitForElm("#url").then((elm) => {elm.value = msg.value});
     // const entryText = document.querySelector("#url");
     // entryText.value = msg.value;
-   
+    const convertSelector = "body > form:nth-child(4) > div:nth-child(2) > input:nth-child(2)" 
+    const downloadSelector = "body > form:nth-child(4) > div:nth-child(2) > a:nth-child(1)"
     // click to convert
-    waitForElm("body > form > div:nth-child(2) > input:nth-child(3)").then((elm) => {
+    waitForElm(convertSelector).then((elm) => {
       elm.click();
     });
     // click to download
-    waitForElm("#download > a:nth-child(1)").then((elm) =>{
+    waitForElm(downloadSelector).then((elm) =>{
       elm.click();
       setTimeout(() => { location.reload(); }, 1000);
     });
